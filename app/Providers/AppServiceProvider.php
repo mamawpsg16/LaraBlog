@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\User;
 use App\Services\Newsletter;
 use MailchimpMarketing\ApiClient;
-use Illuminate\Support\Facades\Gate;
 use App\Services\MailchimpNewsletter;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,8 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Gate::define('admin',function(User $user){
-            return $user->is_admin === 1;
-        });
+      
     }
 }

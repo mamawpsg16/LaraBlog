@@ -18,24 +18,23 @@ class SessionController extends Controller
         ]);
 
         //attempt authenticate the user
-        if(auth()->attempt($data)){
+        if(!auth()->attempt($data)){
         
             //auth failed
             throw ValidationException::withMessages([
                 'email' => 'provided credentials doesnt match'
             ]);
+
         }
-        
-        
+        session()->regenerate();
         //auth failed
         // return back()
         // ->withInput()
         // ->withErrors(['email' => 'Credentials doesnt match']);
 
         //session fixation
-        session()->regenerate();
-
         return redirect('/')->with('success','Welcome Back');
+
     }
 
     public function destroy(){

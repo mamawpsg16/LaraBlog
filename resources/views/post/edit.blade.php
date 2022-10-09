@@ -1,6 +1,6 @@
 <x-layout>
     <x-setting :header="'Edit  Post : '.$post->title">
-        <form method="POST" action="{{ route('admin.posts.update',$post->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('posts.update',$post->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <x-form.input name="title" placeholder="Title" :value="old('title',$post->title)" required></x-form.input>
@@ -19,6 +19,12 @@
                 </select>
                 <x-form.error name="category_id"></x-form.error>
             </x-form.field>
+            @can('admin')
+            <x-form.field class="mb-4">
+                    <label for="" class="block text-sm uppercase font-bold text-gray-700">Published At</label>
+                    <input type="checkbox" name="published_at" {{ isset($post->published_at) ? 'checked' : ''}}>
+            </x-form.field>
+            @endcan
             <x-form.button>Update</x-form.button>
         </form>
     </x-setting>

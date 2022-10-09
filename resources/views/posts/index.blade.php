@@ -1,6 +1,9 @@
 <x-layout>
     @include('partials._post-header')
-    <main class="max-w-6xl mx-auto mt-6 lg:mt-20 space-y-6">
+    <div class="max-w-screen-2xl text-right mt-6">
+        <a href="{{ route('posts.create') }}" class="transition-colors duration-300 bg-green-500 hover:bg-green-600 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">Create New Post</a>
+    </div>
+    <main class="max-w-6xl mx-auto mt-6 lg:mt-20 space-y-6">    
         @if(count($posts) > 0)
             <x-post-featured-card :post="$posts[0]"></x-post-featured-card>
         @else

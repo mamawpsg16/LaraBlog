@@ -2,10 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PostCommentsController;
 
 /*
@@ -21,20 +26,19 @@ use App\Http\Controllers\PostCommentsController;
 
 
 /** HOME */
-Route::get('/',[PostController::class,'index'])->name('posts.index');
+Route::get('/',PostsController::class)->name('posts.index');
 
-/** POST SHOW */
-Route::get('post/{post:slug}',[PostController::class,'show'])->name('posts.show');
+
 
 /** NEWSLETTER */
 Route::post('/newsletter', NewsletterController::class)->name('newsletter.signup');
 
+Route::post('/login',[SessionController::class,'store'])->name('login.store');
+Route::post('/register/store',[RegisterController::class,'store'])->name('register.store');
+
 Route::group(['middleware' => ['guest']],function(){
-    
     /** LOGIN & REGISTER */
     Route::get('/register',[RegisterController::class,'create'])->name('register');
-    Route::post('/register/store',[RegisterController::class,'store'])->name('register.store');
-    Route::post('/login',[SessionController::class,'store'])->name('login.store');
     Route::get('/login',[SessionController::class,'create'])->name('login');
     
 });
@@ -46,10 +50,21 @@ Route::group(['middleware'=>['auth']], function(){
     /** COMMENT */
     Route::post('post/{post:slug}/comments',[PostCommentsController::class,'store'])->name('comment.store');
 
-    /** ADMIN */
-    Route::group(['middleware' => ['admin'],'prefix'=>'admin','as' => 'admin.'],function(){
-        Route::resource('/posts',Admincontroller::class)->except('show');
-    });
+    /** PROFILE */
+    Route::get('/user/profile',[ProfileController::class,'index'])->name('profile');
+    Route::get('/user/profile/edit',[ProfileController::class,'edit'])->name('profile.edit');
+    Route::get('/user/profile/{id:username}',[ProfileController::class,'show'])->name('profile.show');
+    Route::patch('/user/profile/update',[ProfileController::class,'update'])->name('profile.update');
+    Route::post('/user/profile/follow',[ProfileController::class,'store'])->name('profile.follow');
+
+    /** POST SHOW */
+    Route::get('post/{post:slug}',[PostController::class,'show'])->name('posts.show');
+    Route::post('post/like',[PostController::class,'likePost'])->name('posts.like');
+    Route::resource('/posts',PostController::class)->except('show');
+ 
+    Route::resource('users',UserController::class);
+    Route::resource('roles',RoleController::class);
+    Route::resource('permissions',PermissionController::class);
 });
 
 

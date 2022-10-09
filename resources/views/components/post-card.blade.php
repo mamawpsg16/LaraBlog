@@ -33,21 +33,50 @@
                 pariatur.
             </p>
         </div>
+        {{-- <div class="mt-5">
+            <form action="{{ route('posts.like') }}" method="POST">
+                <input type="hidden" name="post_id" value="{{ $post->user_id }}">
+                @csrf
+                @if(!empty(auth()->user()->liked->toArray()) && auth()->user()->liked->contains($post->user_id))
+                    <button class="px-3 py-1 border border-blue-300 ml-2 rounded-full text-white bg-blue-500 text-xs uppercase font-semibold hover:bg-blue-600">Liked</button>
+                @else
+                    <button class="px-3 py-1 border border-blue-300 ml-2 rounded-full text-blue-300  text-xs uppercase font-semibold hover:text-blue-400 hover:border-blue-400">Like</button>
+                @endif
+            </form>
+        </div> --}}
 
         <footer class="flex justify-between items-center mt-8">
             <div class="flex items-center text-sm">
-                <img src="  /images/lary-avatar.svg" alt="Lary avatar">
+                <img src="{{ isset($post->author->profile->image) ? asset('storage/'.$post->author->profile->image) : asset('images/no-profile.png') }}" alt="Lary avatar" width="80" class="rounded-full">
+
                 <div class="ml-3">
-                    <h5 class="font-bold"><a href="/?author={{ $post->author->username }}">{{ $post->author->name }}</a></h5>
+                    <h5 class="font-bold">
+                        <a href="{{ route('profile.show',$post->author->username) }}">
+                            {{ $post->author->name }}
+                        </a>
+                    </h5>
                 </div>
+
+                @if($post->author->id != auth()->id())
+                <form action="{{ route('profile.follow') }}" method="POST">
+                    <input type="hidden" name="profile_id" value="{{ $post->user_id }}">
+                    @csrf
+                    @if(isset(auth()->user()->following) && auth()->user()->following->contains($post->user_id))
+                        <button class="px-3 py-1 border border-blue-300 ml-2 rounded-full text-white bg-blue-500 text-xs uppercase font-semibold hover:bg-blue-600">Following</button>
+                    @else
+                        <button class="px-3 py-1 border border-blue-300 ml-2 rounded-full text-white bg-blue-500 text-xs uppercase font-semibold hover:bg-blue-600">Follow</button>
+                    @endif
+                </form>
+                @endif
             </div>
 
             <div>
                 <a href="/post/{{ $post->slug }}"
-                   class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8"
-                >Read More</a>
-            </div>
-        </footer>
+                    class="transition-colors duration-300 text-xs font-semibold bg-gray-200 hover:bg-gray-300 rounded-full py-2 px-8"
+                    >Read More</a>
+                </div>
+            </footer>
+           
     </div>
 </div>
 </article>

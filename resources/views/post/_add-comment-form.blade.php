@@ -3,8 +3,7 @@
         <form action="{{ route('comment.store', $post->slug) }}" method="POST">
             @csrf
             <header class="flex items-center">
-                <img src="https://i.pravatar.cc/60?u={{ auth()->id() }}" alt="Profile" width="60" height="60"
-                    class="rounded-full">
+                <img src="{{ isset(auth()->user()->profile->image) ? asset('storage/'.auth()->user()->profile->image) : asset('images/no-profile.png') }}" alt="Lary avatar" width="60" height="60"" class="rounded-full">
                 <h2 class="ml-4">Want to participate?</h2>
             </header>
             <x-form.field>

@@ -30,7 +30,8 @@ class PostRequest extends FormRequest
             'excerpt' => ['required','min:5','max:255'],
             'image' => request()->routeIs('admin.create.post') ? ['required','image'] : ['image'],
             'body' => ['required','min:5','max:255'],
-            'category_id' => ['required',Rule::exists('categories','id')]
+            'category_id' => ['required',Rule::exists('categories','id')],
+            'published_at' => ['sometimes']
         ];
     }
 }
